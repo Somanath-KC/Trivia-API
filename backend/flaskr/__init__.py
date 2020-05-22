@@ -52,7 +52,7 @@ def create_app(test_config=None):
 
 
     '''
-    @TODO: 
+    @TODO:[COMPLETED] 
     Create an endpoint to handle GET requests for questions, 
     including pagination (every 10 questions). 
     This endpoint should return a list of questions, 
@@ -92,12 +92,27 @@ def create_app(test_config=None):
 
 
     '''
-    @TODO: 
+    @TODO:[COMPLETED]
     Create an endpoint to DELETE question using a question ID. 
 
     TEST: When you click the trash icon next to a question, the question will be removed.
     This removal will persist in the database and when you refresh the page. 
     '''
+    @app.route('/questions/<int:question_id>', methods=['DELETE'])
+    def delete_question_with_id(question_id):
+        
+        question = Question.query.get(question_id)
+
+        try:
+          question.delete()
+        except Exception as e:
+          # Print exception for debugging
+          print(e)
+          abort(400)
+        
+        return jsonify({
+            'success': True
+        })
 
     '''
     @TODO: 
