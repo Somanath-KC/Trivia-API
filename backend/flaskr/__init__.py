@@ -71,8 +71,6 @@ def create_app(test_config=None):
       start = (page - 1) * number_of_questions_per_page
       end = start + number_of_questions_per_page
 
-      print(page)
-
       questions = Question.query.order_by(Question.id).all()
 
       questions_paginated = [question.format() for question in questions][start:end]
