@@ -31,7 +31,7 @@ def create_app(test_config=None):
 
 
     '''
-    @TODO: 
+    @TODO:[COMPLETED] 
     Create an endpoint to handle GET requests 
     for all available categories.
     '''
@@ -49,6 +49,7 @@ def create_app(test_config=None):
           'categories': [category.type for category in categories],
           'total_categories': len(categories)
         })
+
 
 
     '''
@@ -113,9 +114,11 @@ def create_app(test_config=None):
         return jsonify({
             'success': True
         })
+        
+
 
     '''
-    @TODO: 
+    @TODO: [COMPLETED]
     Create an endpoint to POST a new question, 
     which will require the question and answer text, 
     category, and difficulty score.
@@ -124,9 +127,11 @@ def create_app(test_config=None):
     the form will clear and the question will appear at the end of the last page
     of the questions list in the "List" tab.  
     '''
-
+    # POST REQUEST FOR NEW QUESTION AND SEARCH ACTION
+    # WERE DEFINED IN ONE FUNCTION  post_question()
+    
     '''
-    @TODO: 
+    @TODO: [COMPLETED]
     Create a POST endpoint to get questions based on a search term. 
     It should return any questions for whom the search term 
     is a substring of the question. 
@@ -136,6 +141,38 @@ def create_app(test_config=None):
     Try using the word "title" to start. 
     '''
 
+    @app.route('/questions', methods=['POST'])
+    def post_question():
+
+        post_data = request.get_json()
+        
+        # Checks weather post request is made for search or not
+        if post_data.get('searchTerm', False):
+            search_term_filter = Question.question.ilike('%{}%'.format(post_data.get('searchTerm')))
+            questions = Question.query.filter(search_term_filter).all()
+
+            return jsonify({
+                'status': True,
+                'questions': [item.format() for item in questions],
+                'total_questions': len(questions),
+                'current_category': None
+            })
+
+        else:
+            # Using dictionary Unpacking to assign attribuites
+            question = Question(**post_data)
+
+            try:
+              question.insert()
+            except:
+              abort(422)
+
+            return jsonify({
+                'status': True
+            }), 201
+
+
+
     '''
     @TODO: 
     Create a GET endpoint to get questions based on category. 
@@ -144,6 +181,21 @@ def create_app(test_config=None):
     categories in the left column will cause only questions of that 
     category to be shown. 
     '''
+    @app.route('/categories/<category_id>/questions')
+    def get_questions_by_category(category_id):
+
+        questions = Question.query.filter(Question.category == category_id).all()
+
+        if len(questions) == 0:
+          abort(404)
+
+        return jsonify({
+            'status': True,
+            'questions': [item.format() for item in questions],
+            'total_questions': len(questions),
+            'current_category': category_id
+        })
+
 
 
     '''
