@@ -106,7 +106,7 @@ def create_app(test_config=None):
         except Exception as e:
           # Print exception for debugging
           print(e)
-          abort(400)
+          abort(422)
         
         return jsonify({
             'success': True
