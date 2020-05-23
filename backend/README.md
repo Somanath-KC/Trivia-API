@@ -196,7 +196,7 @@ Errors are returned as JSON objest in the below format:
   }
 ```
 The API may return following of errors:
--  400: Bad Request
+- 400: Bad Request
 - 404: Not Found
 - 422: Unprocessable Entity
 - 500: Error in API
@@ -209,10 +209,10 @@ The API may return following of errors:
   GET		'/categories/<category_id>/questions'
   
   GET		'/questions'
-  POST	'/questions'
-  DELETE	'/questions/<question_id>'
+  POST		'/questions'
+  DELETE		'/questions/<question_id>'
   
-  POST	'/quizzes'
+  POST		'/quizzes'
   ```
 
 GET  &nbsp;&nbsp;/categories
