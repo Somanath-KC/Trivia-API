@@ -161,11 +161,11 @@ def create_app(test_config=None):
             required_post_data = {key: post_data[key] for key in post_data if post_data[key]}
 
             # Refrence: 
-            #         https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/406
+            #         https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400
             if len(required_post_data.keys()) < 4:
-                # 406: The post data is not acceptable since it 
+                # 400: The post data is a bad request since it 
                 # dose not include required fields. 
-                abort(406)
+                abort(400)
 
             # Using dictionary Unpacking to assign attribuites
             question = Question(**required_post_data)
@@ -277,13 +277,13 @@ def create_app(test_config=None):
             'message': 'Unprocessable Entity'
         }), 422
 
-    @app.errorhandler(406)
+    @app.errorhandler(400)
     def not_acceptable(error):
 
       return jsonify({
           'success': False,
-          'error': 406,
-          'message': 'Not Acceptable'
+          'error': 400,
+          'message': 'Bad Request'
       })
 
     @app.errorhandler(500)
