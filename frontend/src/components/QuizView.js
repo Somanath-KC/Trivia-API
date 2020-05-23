@@ -54,7 +54,7 @@ class QuizView extends Component {
       contentType: 'application/json',
       data: JSON.stringify({
         previous_questions: previousQuestions,
-        quiz_category: {'id': parseInt(this.state.quizCategory.id) + 1 || 0}
+        quiz_category: parseInt(this.state.quizCategory.id) + 1 || 0
       }),
       xhrFields: {
         withCredentials: true
