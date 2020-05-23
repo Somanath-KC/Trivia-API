@@ -180,7 +180,7 @@ GET '/categories'
 ```
 
 ## API
-A flask based RESTful API for trivia application.
+A flask based REST API for trivia application.
 
 #### Base URL
 Base URL: This app can be run locally and is not hosted as a base URL. The backend is hosted at: [http://127.0.0.1:5000/](http://127.0.0.1:5000/) This is set as a proxy in the frontend configuration.
@@ -210,7 +210,7 @@ The API may return following of errors:
   
   GET		'/questions'
   POST	'/questions'
-  DELETE	'/questions'
+  DELETE	'/questions/<question_id>'
   
   POST	'/quizzes'
   ```
@@ -219,7 +219,7 @@ GET  &nbsp;&nbsp;/categories
 
 - Fetches an array containing names of categories
 - Request Arguments: None
-- Returns an object with success value, categories and total categories
+- Returns a JSON object with success value, categories and total categories
 
 Sample Output
 ```
@@ -243,7 +243,7 @@ GET &nbsp;&nbsp;/categories/<category_id>/questions
 
 - Fetches an array of questions  within category
 - Request Arguments: valid category id in url
-- Returns an object with success value, current category, array of questions and total questions with in the category.
+- Returns a JSON object with success value, current category, array of questions and total questions with in the category.
 
 Sample Output
 ```
@@ -276,7 +276,7 @@ GET	'/categories/6/questions'
 GET &nbsp;&nbsp;'/questions'
 - Fetches an array of questions  with pagination
 - Request Arguments: page -> integer (optional, defualts to 1)
-- Returns an object with success value, current category, array of questions and total questions with in the category.
+- Returns a JSON object with success value, current category, array of questions and total questions with in the category.
 
 Sample Output
 ```
@@ -312,6 +312,102 @@ GET	'/questions?page=3'
 "total_questions":  29
 }
 ```
+
+POST &nbsp;&nbsp;'/questions'
+
+i. To add new questions
+- Adds new question to database.
+- Request Arguments: None
+- Request Body: Required (JSON)
+	```
+	{
+		"question": "What is the heaviest organ in the human body?",
+		"answer": "The Liver",
+		"category": "1",
+		"difficulty": 4
+	}
+	```
+- Returns a JSON object with success value and question id of the newly inserted question.
+
+Sample Output
+```
+{
+"question_id":  39,
+"success":  true
+}
+```
+
+ii. To perform search 
+- Retrives questions containing input search term.(case-insensitive)
+- Request Arguments: None
+- Request Body: Required (JSON)
+	```
+	{
+		"searchTerm": "Body",
+	}
+	```
+- Returns a JSON object with success value, array of questions, current category and total questions count.
+
+Sample Output
+```
+{
+"current_category":  null,
+"questions":  [
+	{
+	 "answer":  "The Liver",
+	 "category":  1,
+	 "difficulty":  4,
+	 "id":  20,
+	 "question":  "What is the heaviest organ in the human body?"
+	}
+],
+"success":  true,
+"total_questions":  1
+}
+```
+DELETE  &nbsp;&nbsp;/questions/<question_id>
+
+- Deletes the question with specific id provided in URL
+- Request Arguments: None
+- Returns a JSON object with success value.
+
+Sample Output
+```
+DELETE	/questions/1
+
+{
+	'success':  True
+}
+```
+
+POST  &nbsp;&nbsp;/quizzes
+
+- Fetches the random question from requested category.
+- Request Arguments: None
+- Request Body: Required (JSON)
+	````
+	{
+		"previous_questions": [],
+		"quiz_category": 4
+	}
+	````
+- Returns a JSON object with success value and question.
+
+Sample Output
+```
+POST	/quizzes
+{
+"question":  {
+	"answer":  "Muhammad Ali",
+	"category":  4,
+	"difficulty":  1,
+	"id":  9,
+	"question":  "What boxer's original name is Cassius Clay?"
+	},
+"success":  true
+}
+```
+
 
 
 ## Testing
