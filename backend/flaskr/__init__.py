@@ -228,15 +228,17 @@ def create_app(test_config=None):
         post_data = request.get_json()
 
         previous_questions = post_data.get('previous_questions', list())
-        quiz_category = post_data.get('quiz_category').get('type')
+        quiz_category = post_data.get('quiz_category').get('id')
+        category_id = int(quiz_category)
 
-        categories = Category.query.filter(Category.type == quiz_category.title()).all()
-        category_id = [str(item.id) for item in categories]
-
-        # This selects all categories
-        if not category_id:
-            category_id = [str(item.id) for item in Category.query.all()]
-
+        # Category id = 0 refers to all categories
+        if category_id == 0:
+            query_result = Category.query.all()
+            category_id = [item.id for item in query_result]
+        else:
+            query_result = Category.query.filter(Category.id == category_id).all()
+            category_id = [item.id for item in query_result]
+        
         # Querys all questions in current category 
         # and questions not in previous questions 
         # Reference: 
