@@ -227,8 +227,13 @@ def create_app(test_config=None):
         
         post_data = request.get_json()
 
-        previous_questions = post_data.get('previous_questions', list())
-        quiz_category = post_data.get('quiz_category').get('id')
+        previous_questions = post_data.get('previous_questions')
+        quiz_category = post_data.get('quiz_category')
+        
+        # if request body dose not contain mandatory parts
+        if previous_questions == None or quiz_category == None:
+            abort(400)
+
         category_id = int(quiz_category)
 
         # Category id = 0 refers to all categories
@@ -237,6 +242,9 @@ def create_app(test_config=None):
             category_id = [item.id for item in query_result]
         else:
             query_result = Category.query.filter(Category.id == category_id).all()
+            # if category_id is not valid
+            if not query_result:
+                abort(422)
             category_id = [item.id for item in query_result]
         
         # Querys all questions in current category 
