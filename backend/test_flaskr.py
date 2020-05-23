@@ -129,7 +129,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data.get('question_id'))
 
 
-    def test_post_new_question_with_missing_data(self):
+    def test_post_new_question_with_missing_fields(self):
         # Required data 'category' is not being supplied in body
         sample_question = {
                             'question': 'Is that true?', 
@@ -200,7 +200,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data.get('question'))
 
 
-    def test_post_quizzes_invalid_body(self):
+    def test_post_quizzes_with_missing_fields(self):
         # Quiz category is missing
         wrong_body_format = {
             'previous_questions': []
@@ -215,7 +215,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data.get('message'))
 
 
-def test_post_quizzes_invalid_values(self):
+def test_post_quizzes_with_invalid_values(self):
         # Quiz category is beyond the scope
         wrong_body_format = {
             'previous_questions': [],
