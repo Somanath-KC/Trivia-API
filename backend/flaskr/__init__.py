@@ -154,7 +154,7 @@ def create_app(test_config=None):
             questions = Question.query.filter(search_term_filter).all()
 
             return jsonify({
-                'status': True,
+                'success': True,
                 'questions': [item.format() for item in questions],
                 'total_questions': len(questions),
                 'current_category': None
@@ -182,7 +182,7 @@ def create_app(test_config=None):
               abort(422)
 
             return jsonify({
-                'status': True,
+                'success': True,
                 'question_id': question.id
             }), 201
 
@@ -204,7 +204,7 @@ def create_app(test_config=None):
           abort(404)
 
         return jsonify({
-            'status': True,
+            'success': True,
             'questions': [item.format() for item in questions],
             'total_questions': len(questions),
             'current_category': category_id
