@@ -39,7 +39,6 @@ def create_app(test_config=None):
     def get_all_categories():
 
         categories = Category.query.order_by(Category.id).all()
-        print(categories)
 
         if len(categories) == 0:
           abort(404)
@@ -209,6 +208,35 @@ def create_app(test_config=None):
     one question at a time is displayed, the user is allowed to answer
     and shown whether they were correct or not. 
     '''
+    @app.route('/quizzes', methods=['POST'])
+    def play_quiz():
+        
+        post_data = request.get_json()
+
+        previous_questions = post_data.get('previous_quesions', list())
+        quiz_category = post_data.get('quiz_category').get('type')
+
+        categories = Category.query.filter(Category.type == quiz_category.title()).all()
+        category_id = [str(item.id) for item in categories]
+
+        # This selects all categories
+        if not category_id:
+            category_id = [str(item.id) for item in Category.query.all()]
+
+        # Querys all questions in current category 
+        # and questions not  in previous questions 
+        current_category_questions = Question.category.in_(category_id)
+        in_previous_questions = Question.id.in_(previous_questions)
+        questions = Question.query.filter(current_category_questions, ~in_previous_questions).all()
+
+        # Selects the question randomly
+        random_id = random.randint(0, len(questions)-1)
+
+        return jsonify({
+            'success': True,
+            'question': questions[random_id].format()
+        })
+
 
     '''
     @TODO: 
