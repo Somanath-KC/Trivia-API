@@ -187,7 +187,49 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data.get('message'))
 
 
-    
+    def test_post_quizzes(self):
+        sample_body = {
+            'previous_questions': [],
+            'quiz_category': 1
+        }
+        res = self.client().post('/quizzes', json=sample_body)
+        data = res.get_json()
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data.get('success'))
+        self.assertTrue(data.get('question'))
+
+
+    def test_post_quizzes_invalid_body(self):
+        # Quiz category is missing
+        wrong_body_format = {
+            'previous_questions': []
+        }
+
+        res = self.client().post('/quizzes', json=wrong_body_format)
+        data = res.get_json()
+
+        self.assertEqual(res.status_code, 400)
+        self.assertFalse(data.get('success'))
+        self.assertEqual(data.get('error'), 400)
+        self.assertTrue(data.get('message'))
+
+
+def test_post_quizzes_invalid_values(self):
+        # Quiz category is beyond the scope
+        wrong_body_format = {
+            'previous_questions': [],
+            'quiz_category': 99
+        }
+
+        res = self.client().post('/quizzes', json=wrong_body_format)
+        data = res.get_json()
+
+        self.assertEqual(res.status_code, 422)
+        self.assertFalse(data.get('success'))
+        self.assertEqual(data.get('error'), 422)
+        self.assertTrue(data.get('message'))
+
         
         
 
