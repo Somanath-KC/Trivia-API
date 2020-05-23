@@ -291,7 +291,7 @@ def create_app(test_config=None):
           'success': False,
           'error': 400,
           'message': 'Bad Request'
-      })
+      }), 400
 
     @app.errorhandler(500)
     def server_error(error):
