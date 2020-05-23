@@ -18,6 +18,7 @@ def create_app(test_config=None):
     '''
     cors = CORS(app, resources={r"*": {"origin": "*"}})
 
+
     '''
     @TODO:[COMPLETED] Use the after_request decorator to set Access-Control-Allow
     '''
@@ -27,7 +28,6 @@ def create_app(test_config=None):
         response.headers.add('Access-Control-Allow-Methods', 'GET,PATCH,POST,DELETE,OPTIONS')
 
         return response
-
 
 
     '''
@@ -48,7 +48,6 @@ def create_app(test_config=None):
           'categories': [category.type for category in categories],
           'total_categories': len(categories)
         })
-
 
 
     '''
@@ -90,7 +89,6 @@ def create_app(test_config=None):
       })
 
 
-
     '''
     @TODO:[COMPLETED]
     Create an endpoint to DELETE question using a question ID. 
@@ -114,7 +112,6 @@ def create_app(test_config=None):
             'success': True
         })
         
-
 
     '''
     @TODO: [COMPLETED]
@@ -171,7 +168,6 @@ def create_app(test_config=None):
             }), 201
 
 
-
     '''
     @TODO: 
     Create a GET endpoint to get questions based on category. 
@@ -194,7 +190,6 @@ def create_app(test_config=None):
             'total_questions': len(questions),
             'current_category': category_id
         })
-
 
 
     '''
@@ -243,7 +238,6 @@ def create_app(test_config=None):
             'success': True,
             'question': questions[random_id].format()
         })
-
 
 
     '''
