@@ -155,8 +155,20 @@ def create_app(test_config=None):
             })
 
         else:
+            # Check weather question and answer text, 
+            # category, and difficulty score were available in body
+            # Adds only if values of that key is not empty
+            required_post_data = {key: post_data[key] for key in post_data if post_data[key]}
+
+            # Refrence: 
+            #         https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/406
+            if len(required_post_data.keys()) < 4:
+                # 406: The post data is not acceptable since it 
+                # dose not include required fields. 
+                abort(406)
+
             # Using dictionary Unpacking to assign attribuites
-            question = Question(**post_data)
+            question = Question(**required_post_data)
 
             try:
               question.insert()
@@ -264,6 +276,15 @@ def create_app(test_config=None):
             'error': 422,
             'message': 'Unprocessable Entity'
         }), 422
+
+    @app.errorhandler(406)
+    def not_acceptable(error):
+
+      return jsonify({
+          'success': False,
+          'error': 406,
+          'message': 'Not Acceptable'
+      })
 
     @app.errorhandler(500)
     def server_error(error):
