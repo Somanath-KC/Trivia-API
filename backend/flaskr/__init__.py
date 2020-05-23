@@ -198,7 +198,7 @@ def create_app(test_config=None):
 
 
     '''
-    @TODO: 
+    @TODO:[COMPLETED]
     Create a POST endpoint to get questions to play the quiz. 
     This endpoint should take category and previous question parameters 
     and return a random questions within the given category, 
@@ -213,7 +213,7 @@ def create_app(test_config=None):
         
         post_data = request.get_json()
 
-        previous_questions = post_data.get('previous_quesions', list())
+        previous_questions = post_data.get('previous_questions', list())
         quiz_category = post_data.get('quiz_category').get('type')
 
         categories = Category.query.filter(Category.type == quiz_category.title()).all()
@@ -226,8 +226,15 @@ def create_app(test_config=None):
         # Querys all questions in current category 
         # and questions not  in previous questions 
         current_category_questions = Question.category.in_(category_id)
-        in_previous_questions = Question.id.in_(previous_questions)
-        questions = Question.query.filter(current_category_questions, ~in_previous_questions).all()
+        not_in_previous_questions = ~Question.id.in_(previous_questions)
+        print(previous_questions)
+        questions = Question.query.filter(current_category_questions, not_in_previous_questions).all()
+
+        # The Game will end if user answered 5 or no more questions available
+        if len(previous_questions) == 5 or len(questions) == 0:
+            return jsonify({
+                'success': True
+            })
 
         # Selects the question randomly
         random_id = random.randint(0, len(questions)-1)
