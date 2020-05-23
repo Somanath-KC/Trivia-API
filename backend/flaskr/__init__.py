@@ -220,6 +220,8 @@ def create_app(test_config=None):
 
         # Querys all questions in current category 
         # and questions not  in previous questions 
+        # Reference: 
+        # https://stackoverflow.com/questions/20060485/sqlalchemy-select-using-reverse-inclusive-not-in-list-of-child-column-values
         current_category_questions = Question.category.in_(category_id)
         not_in_previous_questions = ~Question.id.in_(previous_questions)
         print(previous_questions)
