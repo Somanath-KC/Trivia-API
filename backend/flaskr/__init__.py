@@ -78,7 +78,9 @@ def create_app(test_config=None):
           abort(404)
 
       categories = [category.type for category in Category.query.order_by(Category.id).all()]
-
+      
+      # Current Category Refrence:
+      # https://knowledge.udacity.com/questions/82424
 
       return jsonify({
           'success': True,
@@ -100,6 +102,10 @@ def create_app(test_config=None):
     def delete_question_with_id(question_id):
         
         question = Question.query.get(question_id)
+        
+        # If question with given id is not in db.
+        if not question:
+            abort(404)
 
         try:
           question.delete()
@@ -176,7 +182,8 @@ def create_app(test_config=None):
               abort(422)
 
             return jsonify({
-                'status': True
+                'status': True,
+                'question_id': question.id
             }), 201
 
 
@@ -231,7 +238,7 @@ def create_app(test_config=None):
             category_id = [str(item.id) for item in Category.query.all()]
 
         # Querys all questions in current category 
-        # and questions not  in previous questions 
+        # and questions not in previous questions 
         # Reference: 
         # https://stackoverflow.com/questions/20060485/sqlalchemy-select-using-reverse-inclusive-not-in-list-of-child-column-values
         current_category_questions = Question.category.in_(category_id)
